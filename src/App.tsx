@@ -1,49 +1,32 @@
-import { useState } from "preact/hooks";
-import preactLogo from "./assets/preact.svg";
-import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import { ColorPicker } from "./ColorPicker";
+
+import { signal } from "@preact/signals";
+import Color from "colorjs.io";
+import { hueSequence } from "./color";
+import { SwatchRow } from "./ColorSwatch";
+import { PaletteSettings } from "./PaletteSettings";
+
+const baseColor = signal(new Color("LCH", [50, 50, 0]));
+const settings = signal({ hueCount: 6 });
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
   return (
     <main class="container">
-      <h1>Welcome to Tauri + Preact</h1>
+      <h1>ColorTool</h1>
 
       <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://preactjs.com" target="_blank">
-          <img src={preactLogo} class="logo preact" alt="Preact logo" />
-        </a>
+        <div class="settings">
+          <ColorPicker color={baseColor} />
+          <PaletteSettings settings={settings} />
+        </div>
+        <div class="palette">
+          <h2>Hue Progression</h2>
+          <SwatchRow
+            colors={hueSequence(baseColor.value, settings.value.hueCount)}
+          />
+        </div>
       </div>
-      <p>Click on the Tauri, Vite, and Preact logos to learn more.</p>
-
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onInput={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
     </main>
   );
 }

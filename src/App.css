@@ -95,6 +95,36 @@ button {
   margin-right: 5px;
 }
 
+input[type="range"] {
+  vertical-align: bottom;
+}
+
+form {
+  text-align: left;
+  label {
+    display: block;
+  }
+}
+
+.color-display {
+  display: flex;
+  flex-direction: row;
+
+  .color-string {
+    padding: 0 5px;
+    margin-right: 10px;
+    height: 30px;
+    vertical-align: bottom;
+    font-family: monospace;
+  }
+}
+.color-swatch {
+  width: 30px;
+  height: 30px;
+
+  background-color: var(--swatch-color);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
